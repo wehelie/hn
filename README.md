@@ -2,7 +2,7 @@
 
 ![GitHub Logo](img/hn.png)
 
-##### Click [here](www.google.com) to see the live link
+##### Click [here](https://wehelie.github.io/hn/) to visit the live link
 
 # Hacker News API Docs
 ## Design
