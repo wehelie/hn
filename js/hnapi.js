@@ -1,15 +1,12 @@
 // object to store articles
 var storyObj = {};
-// each ID
-var storyID;
-
 /**
- * httpRequest - makes an ajax request to given url
+ * xhr - makes an ajax request to given url
  * @param  {string} url the server (file) location
  * @param  {object} cb  callback
  * @return {object}     returns a JSON object
  */
-function httpRequest(url, cb) {
+function xhr(url, cb) {
   // create an instance of an object
   var xmlHttp = new XMLHttpRequest();
   // contains the event handler to be called when the readystatechange event is fired
@@ -24,7 +21,6 @@ function httpRequest(url, cb) {
   xmlHttp.send(null);
 }
 
-
 /**
  * newStories - get all new stories
  *
@@ -35,28 +31,26 @@ function newStories(res) {
   var newV0 = JSON.parse(res);
   for (var i = 0; i < 30; i++) {
     var storyID = newV0[i];
-    httpRequest(`https://hacker-news.firebaseio.com/v0/item/${storyID}.json?print=pretty`, newStoriesTitle);
+    xhr(`https://hacker-news.firebaseio.com/v0/item/${storyID}.json?print=pretty`, paintDOM);
   }
 }
 
-function getNewStories() {
-  httpRequest('https://hacker-news.firebaseio.com/v0/newstories.json?print=pretty', newStories)
+function init() {
+  xhr('https://hacker-news.firebaseio.com/v0/newstories.json?print=pretty', newStories)
 }
 
-
 /**
- * newStoriesTitle - adds information to the DOM
+ * paintDOM - adds information to the DOM
  *
  * @param  {object} res responseText
  * @return {type}     description
  */
-function newStoriesTitle(res) {
+function paintDOM(res) {
   var newV0 = JSON.parse(res);
   // add adds to the story object hash
   storyObj[newV0.id] = newV0;
   // counter to keep track of number of objects
   var counter = Object.keys(storyObj).length;
-  console.log(newV0.comment)
   // append to the DOM
   $('#news').append(
     `<p class="item">
@@ -78,7 +72,7 @@ function newStoriesTitle(res) {
     </p>`);
 }
 // run
-getNewStories();
+init();
 
 // source: stackoverflow
 function timeSince(date) {
@@ -104,7 +98,7 @@ function timeSince(date) {
  */
 function getBaseUrl(url) {
   var parse_url = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?$/;
-  var parts = parse_url.exec( url );
+  var parts = parse_url.exec(url);
   var result = parts[3];
   return result;
 };
